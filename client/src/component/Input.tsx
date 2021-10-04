@@ -6,12 +6,6 @@ const socket = socketio("http://localhost:5000");
 const Input = () => {
   const [inputVal, setInputVal] = useState("");
 
-  // useEffect(() => {
-  //   socket.on("message", ({ name, message }) => {
-  //     setChat([...chat, { name, message }]);
-  //   });
-  // });
-
   const SendMsgToButton = () => {
     socket.emit("chatting", `${inputVal}`);
     setInputVal("");
@@ -21,6 +15,7 @@ const Input = () => {
     if (e.key == "Enter") {
       SendMsgToButton();
       e.preventDefault();
+      return;
     }
   };
 

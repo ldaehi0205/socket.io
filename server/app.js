@@ -4,8 +4,6 @@ const app = express();
 const path = require("path");
 const server = http.createServer(app);
 
-const socketIO = require("socket.io");
-
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
@@ -17,13 +15,12 @@ app.use(
   express.static(path.join("/Users/leedaehee/Desktop/chat", "client", "public"))
 );
 //__dirname은 현제 폴더 경로
-console.log(__dirname, "===");
 
 io.on("connection", socket => {
   console.log("연결되었습니다");
   socket.on("chatting", data => {
     console.log(data);
-    io.emit("chatting", `그래${data}`);
+    io.emit("chatting", `${data}`);
   });
 });
 

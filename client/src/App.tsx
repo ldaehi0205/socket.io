@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Header from "./component/Header";
 import Input from "./component/Input";
 import ChatContent from "./component/ChatContent";
@@ -8,7 +8,6 @@ import socketio from "socket.io-client";
 const socket = socketio("http://localhost:5000");
 
 const App = () => {
-  console.log(socketio, "---");
   return (
     <Wrapper>
       <Header />
