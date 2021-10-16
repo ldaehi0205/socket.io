@@ -2,13 +2,24 @@ import React, { useState } from "react";
 import socketio from "socket.io-client";
 import styled from "styled-components";
 
-const socket = socketio("http://localhost:5000");
-const Input = () => {
-  const [inputVal, setInputVal] = useState("");
+interface Props {
+	userName:string
+}
 
+const socket = socketio("http://localhost:5000");
+
+const Input = ({userName}:Props) => {
+	const [inputVal, setInputVal] = useState("");
+	
   const SendMsgToButton = () => {
-		if(inputVal === "") return
-    socket.emit("chatting", `${inputVal}`);
+		const removeSpace = inputVal.replace(/ /g,'')
+		if(removeSpace.length === 0) return
+		
+		const chatData = {
+			userName,
+			content:`${inputVal}`			
+		}
+    socket.emit("chatting", chatData);
     setInputVal("");
   };
 	

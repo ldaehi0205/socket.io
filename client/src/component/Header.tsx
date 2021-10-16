@@ -1,13 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 
-const Header = () => {
+interface Props {
+	userName:string,
+	setUserName: React.Dispatch<React.SetStateAction<string>>
+}
+
+const Header = ({userName,setUserName}:Props) => {
   return (
     <Wrapper>
       <ImgWrapper>
         <img src="https://cdn.pixabay.com/photo/2016/10/11/21/43/geometric-1732847__340.jpg" />
       </ImgWrapper>
-      <Title>채팅창</Title>
+      <Title type='text' value={userName} onChange={(e)=>{				
+				setUserName(e.target.value)
+			}}/>
     </Wrapper>
   );
 };
@@ -39,4 +46,11 @@ const ImgWrapper = styled.div`
   }
 `;
 
-const Title = styled.div``;
+const Title = styled.input`
+	border:none;
+
+	:focus{
+		outline:none;
+		border-bottom: 1px solid gray
+	}
+`;

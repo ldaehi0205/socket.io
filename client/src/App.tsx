@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import Header from "./component/Header";
 import Input from "./component/Input";
 import ChatContent from "./component/ChatContent";
@@ -8,11 +8,13 @@ import socketio from "socket.io-client";
 const socket = socketio("http://localhost:5000");
 
 const App = () => {
+	const [userName, setUserName] = useState(`Noname${Math.floor(Math.random()*100+1)}`);
+
   return (
     <Wrapper>
-      <Header />
-      <ChatContent />
-      <Input />
+      <Header userName={userName} setUserName={setUserName}/>
+      <ChatContent userName={userName}/>
+      <Input userName={userName}/>
     </Wrapper>
   );
 };
@@ -24,6 +26,5 @@ const Wrapper = styled.div`
   height: 800px;
   margin: 20px auto;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  /* box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1); */
   border-radius: 10px;
 `;

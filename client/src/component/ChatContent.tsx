@@ -2,10 +2,19 @@ import React, { useState, useEffect, useRef } from "react";
 import socketio from "socket.io-client";
 import styled from "styled-components";
 
+interface Props {
+	userName:string
+}
+
+interface ChatListType {
+	userName:string,
+	content:string
+}
+
 const socket = socketio("http://localhost:5000");
 
-const ChatContent = () => {
-	const [chatList, setChatList] = useState<any>([]);
+const ChatContent = ({userName}:Props) => {
+	const [chatList, setChatList] = useState<ChatListType[]>([]);
 	const elementScroll = useRef<HTMLDivElement | null>(null)
 
   useEffect(()=> {		
@@ -13,7 +22,7 @@ const ChatContent = () => {
 		elementScroll.current.scrollTop = elementScroll.current.scrollHeight;
   	socket.on("chatting", data => {								
 			setChatList([...chatList, data]);
-		});
+	 	});
 		return(()=>{
 			socket.off('chatting')
 		})
@@ -22,11 +31,12 @@ const ChatContent = () => {
   return (
     <Wrapper ref={elementScroll}>
       <UlContainer>
-        {chatList.map((e: any, i: number) => {
+        {chatList.map((e: ChatListType, i: number) => {
           return (
-            <li key={i}>
-              <span>{e}</span>
-            </li>
+            <ChatList key={i} isOwn={userName===e.userName}>
+              <User>{e.userName}</User>
+              <ChatText isOwn={userName===e.userName}>{e.content}</ChatText>
+            </ChatList>
           );
         })}
       </UlContainer>
@@ -45,13 +55,25 @@ const Wrapper = styled.div`
 `;
 
 const UlContainer = styled.ul`
-  list-style: none;
-
-  li {
-    width: fit-content;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: white;
-    border-radius: 10px;
-  }
 `;
+
+const ChatList = styled.li<{isOwn:boolean}>`
+	display: flex;
+	flex-direction: column;
+	align-items: ${props => props.isOwn ?'flex-end' : 'flex-start'};
+	margin-bottom: 15px;
+	list-style: none;
+`
+
+const User = styled.div`
+	margin-bottom: 5px;
+`
+
+const ChatText = styled.div<{isOwn:boolean}>`
+  width: fit-content;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: ${props => props.isOwn ?'#fef01b':'white'};
+  border-radius: 10px;
+
+`

@@ -20,7 +20,7 @@ io.on("connection", socket => {
   console.log("연결되었습니다");
   socket.on("chatting", data => {
     console.log(data);
-    io.emit("chatting", `${data}`);
+    io.emit("chatting", data);
   });
 });
 
