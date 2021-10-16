@@ -10,7 +10,7 @@ const Header = ({userName,setUserName}:Props) => {
   return (
     <Wrapper>
       <ImgWrapper>
-        <img src="https://cdn.pixabay.com/photo/2016/10/11/21/43/geometric-1732847__340.jpg" />
+        <img src="https://source.unsplash.com/random" />
       </ImgWrapper>
       <Title type='text' value={userName} onChange={(e)=>{				
 				setUserName(e.target.value)
