@@ -1,33 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import socketio from "socket.io-client";
 import styled from "styled-components";
-import usePrevious from "../hooks/usePrevious";
 
 const socket = socketio("http://localhost:5000");
 
 const ChatContent = () => {
-  const [chatList, setChatList] = useState<any>([]);
-  const PreChatList: any = usePrevious(chatList);
+	const [chatList, setChatList] = useState<any>([]);
+	const elementScroll = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    console.log(PreChatList, 11, chatList);
-    if (PreChatList) {
-      console.log(PreChatList.length, chatList.length, ")))");
-      if (PreChatList.length + 1 !== chatList.length) return;
-    }
-    // if (chatList.length === 1 || PreChatList.length !== chatList.length) {
-    socket.on("chatting", data => {
-      const pushData = [...chatList];
-      pushData.push(data);
-      console.log(pushData, "---");
-      setChatList(pushData);
-    });
-    // }
-    // }
-  }, [chatList]);
-
+  useEffect(()=> {		
+		if(elementScroll.current)
+		elementScroll.current.scrollTop = elementScroll.current.scrollHeight;
+  	socket.on("chatting", data => {								
+			setChatList([...chatList, data]);
+		});
+		return(()=>{
+			socket.off('chatting')
+		})
+	})
+	
   return (
-    <Wrapper>
+    <Wrapper ref={elementScroll}>
       <UlContainer>
         {chatList.map((e: any, i: number) => {
           return (
@@ -41,7 +34,7 @@ const ChatContent = () => {
   );
 };
 
-export default React.memo(ChatContent);
+export default ChatContent;
 
 const Wrapper = styled.div`
   width: calc(100%-10px);

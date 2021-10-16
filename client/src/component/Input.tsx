@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import socketio from "socket.io-client";
 import styled from "styled-components";
 
@@ -7,12 +7,13 @@ const Input = () => {
   const [inputVal, setInputVal] = useState("");
 
   const SendMsgToButton = () => {
+		if(inputVal === "") return
     socket.emit("chatting", `${inputVal}`);
     setInputVal("");
   };
-
+	
   const SendMsgToKey = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key == "Enter") {
+		if (e.key == "Enter") {
       SendMsgToButton();
       e.preventDefault();
       return;
@@ -25,7 +26,7 @@ const Input = () => {
         onChange={e => {
           setInputVal(e.target.value);
         }}
-        onKeyDown={e => SendMsgToKey(e)}
+        onKeyPress={e => SendMsgToKey(e)}
         value={inputVal}
       />
       <Button inputVal={inputVal.length > 0} onClick={SendMsgToButton}>
